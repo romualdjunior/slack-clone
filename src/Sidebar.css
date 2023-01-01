@@ -1,5 +1,6 @@
 .sidebar {
   color: white;
+  flex: 0.3;
   background-color: var(--slack_color);
   border-top: 1px solide #49274b;
   max-width: 260px;

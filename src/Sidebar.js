@@ -5,8 +5,8 @@ import { Add, Apps, BookmarkBorder, Drafts, ExpandLess, ExpandMore, FiberManualR
 import { Create } from '@material-ui/icons'
 import { InsertComment } from '@material-ui/icons'
 import SidebarOption from './SidebarOption'
-import db from "./firebase"
-function Sidebar() {
+import db from './firebase'
+function Sidebar({ history }) {
     const [channels, setChannels] = useState([])
 
     useEffect(() => {
@@ -19,7 +19,7 @@ function Sidebar() {
             ))
         }
     }, [])
-
+    console.log("history", history)
     return (
         <div className='sidebar'>
             <div className="sidebar__header">
@@ -32,20 +32,20 @@ function Sidebar() {
                 </div>
                 <Create />
             </div>
-            <SidebarOption Icon={InsertComment} title="Threads" />
-            <SidebarOption Icon={Inbox} title="Mentions & reactions" />
-            <SidebarOption Icon={Drafts} title="Saved items" />
-            <SidebarOption Icon={BookmarkBorder} title="Channel browser" />
-            <SidebarOption Icon={PeopleAlt} title="People & user groups" />
-            <SidebarOption Icon={Apps} title="Apps" />
-            <SidebarOption Icon={FileCopy} title="File browser" />
-            <SidebarOption Icon={ExpandLess} title="Show less" />
+            <SidebarOption Icon={InsertComment} title="Threads" history={history} />
+            <SidebarOption Icon={Inbox} title="Mentions & reactions" history={history} />
+            <SidebarOption Icon={Drafts} title="Saved items" history={history} />
+            <SidebarOption Icon={BookmarkBorder} title="Channel browser" history={history} />
+            <SidebarOption Icon={PeopleAlt} title="People & user groups" history={history} />
+            <SidebarOption Icon={Apps} title="Apps" history={history} />
+            <SidebarOption Icon={FileCopy} title="File browser" history={history} />
+            <SidebarOption Icon={ExpandLess} title="Show less" history={history} />
             <hr />
-            <SidebarOption Icon={ExpandMore} title="Channel" />
+            <SidebarOption Icon={ExpandMore} title="Channel" history={history} />
             <hr />
-            <SidebarOption Icon={Add} title="Add Channel" />
+            <SidebarOption Icon={Add} title="Add Channel" addChannelOption={true} history={history} />
             {channels.map(channel => (
-                <SidebarOption title={channel.name} id={channel.id} />
+                <SidebarOption title={channel.name} id={channel.id} key={channel.name} history={history} />
             ))}
         </div>
     )

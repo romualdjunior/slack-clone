@@ -1,8 +1,39 @@
 import React from 'react'
+import { useState } from 'react';
+import { useEffect } from 'react';
+import { useHistory, useNavigate } from 'react-router-dom';
+import db from './firebase';
 import "./SidebarOption.css"
-function SidebarOption({ Icon, title }) {
+// import history from './history'
+
+
+
+function SidebarOption({ Icon, title, id, addChannelOption, history }) {
+
+    let navigate = useNavigate()
+
+    let selectChannel = (path) => {
+        if (id) {
+            // console.log(`/room/${id}`)
+            navigate(`/room/${id}`)
+            navigate(1)
+        }
+        else {
+            console.log("history", history)
+            navigate("/about")
+        }
+    }
+
+    const addChannel = () => {
+        const channelName = prompt("Please enter the channel name")
+        if (channelName) {
+            db.collection("rooms").add({
+                name: channelName,
+            })
+        }
+    }
     return (
-        <div className='sidebarOption'>
+        <div className='sidebarOption' onClick={addChannelOption ? addChannel : selectChannel}>
             {Icon && <Icon className="sidebarOption__icon" />}
             {Icon ? (
                 <h3> {title}</h3>
