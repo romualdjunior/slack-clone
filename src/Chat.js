@@ -4,6 +4,7 @@ import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { InfoOutlined, StarBorderOutlined } from '@material-ui/icons';
 import db from './firebase';
 import Message from './Message';
+import ChatInput from './ChatInput';
 
 //  useParams , useLocation change values in useEffect, they display the previous url instead of the actual one
 // So we use a global variable to stock the present url from useParams before it is changed in the useEffect to the previous one
@@ -25,12 +26,14 @@ function Chat(props) {
     useEffect(() => {
         return () => {
             console.log("currentRoomId", currentRoomId)
+            console.log("currentRoomId", currentRoomId)
 
-            if (currentRoomId)
+            if (currentRoomId !== "")
                 db.collection('rooms').doc(currentRoomId)
-                    .onSnapshot((snapshot) => (
+                    .onSnapshot(snapshot => (
                         setRoomDetails(snapshot.data())
-                    ))
+                    )
+                    )
             db.collection('rooms').doc(currentRoomId)
                 .collection('messages')
                 .orderBy("timestamp", "asc")
@@ -60,15 +63,16 @@ function Chat(props) {
                 </div>
             </div>
             <div className="chat__messages">
-                {roomMessages.map(({ message, timestamp, user, url }) => (
-                    <Message
+                {roomMessages.map(({ message, timestamp, user, userImage, id }) => (
+                    <Message id={id}
                         message={message}
                         timestamp={timestamp}
                         user={user}
-                        userImage={url}
+                        userImage={userImage}
                     />
                 ))}
             </div>
+            <ChatInput channelName={roomDetails?.name} channelId={currentRoomId} />
         </div>
     )
 }

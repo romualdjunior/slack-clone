@@ -6,8 +6,11 @@ import { Create } from '@material-ui/icons'
 import { InsertComment } from '@material-ui/icons'
 import SidebarOption from './SidebarOption'
 import db from './firebase'
+import { useStateValue } from './StateProvier'
 function Sidebar({ history }) {
     const [channels, setChannels] = useState([])
+    const [{ user }] = useStateValue()
+
 
     useEffect(() => {
         return () => {
@@ -27,7 +30,7 @@ function Sidebar({ history }) {
                     <h2>Clever Programmer</h2>
                     <h3>
                         <FiberManualRecord />
-                        Rafeh Qazi
+                        {user?.displayName}
                     </h3>
                 </div>
                 <Create />
