@@ -1,4 +1,4 @@
-import firebase from 'firebase';
+// import firebase from 'firebase';
 import React, { useState } from 'react'
 import "./ChatInput.css"
 import db from './firebase';
@@ -14,7 +14,7 @@ function ChatInput({ channelName, channelId }) {
         if (channelId) {
             db.collection('rooms').doc(channelId).collection("messages").add({
                 message: input,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                timestamp: db.firestore.FieldValue.serverTimestamp(),
                 user: user.displayName,
                 userImage: user.photoURL
             })
