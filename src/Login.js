@@ -5,9 +5,11 @@ import { auth, provider } from "./firebase"
 import { useStateValue } from './StateProvier'
 import { actionTypes } from './reducer'
 import { signInWithPopup } from 'firebase/auth'
+import { useNavigate } from 'react-router-dom'
 
 function Login() {
     const [state, dispatch] = useStateValue()
+    const navigate = useNavigate()
     const signIn = () => {
         auth
             .signInWithPopup(provider)
@@ -17,6 +19,8 @@ function Login() {
                     type: actionTypes.SET_USER,
                     user: result.user
                 })
+                navigate("/room/RONdX0VEPha1aw6DrhKU")
+
             })
             .catch((error) => {
                 alert(error.message)

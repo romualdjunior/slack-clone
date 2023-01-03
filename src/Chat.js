@@ -14,6 +14,7 @@ function Chat(props) {
 
     const [roomDetails, setRoomDetails] = useState(null)
     const [roomMessages, setRoomMessages] = useState([])
+
     const params = useParams();
 
     // roomId value change in useEffect and takes the value found in the previous url
@@ -21,45 +22,51 @@ function Chat(props) {
     const roomId = params.roomId
     currentRoomId = params.roomId
     const location = useLocation()
+    const navigate = useNavigate()
 
 
+    const getMessages = () => {
+        if (currentRoomId !== "") {
+            console.log(currentRoomId)
+            db.collection('rooms').doc(currentRoomId)
+                .onSnapshot((snapshot) => (
+                    setRoomDetails(
+                        {
+                            id: snapshot.id,
+                            name: snapshot.data().name
+                        }
+                    )
+                ))
+
+            db.collection('rooms').doc(currentRoomId)
+                .collection('messages')
+                .orderBy("timestamp", "asc")
+                .onSnapshot(snapshot =>
+                    setRoomMessages(
+                        snapshot.docs.map(doc => (
+                            {
+                                "id": doc.id,
+                                "timestamp": doc.data().timestamp,
+                                "user": doc.data().user,
+                                "userImage": doc.data().userImage,
+                                "message": doc.data().message
+                            }
+
+                        ))
+                    )
+                )
+        }
+    }
     useEffect(() => {
         return () => {
             console.log("currentRoomId", currentRoomId)
+            getMessages()
 
-            if (currentRoomId !== "") {
-                console.log(currentRoomId)
-                db.collection('rooms').doc(currentRoomId)
-                    .onSnapshot((snapshot) => (
-                        setRoomDetails(
-                            {
-                                id: snapshot.id,
-                                name: snapshot.data().name
-                            }
-                        )
-                    ))
-
-                db.collection('rooms').doc(currentRoomId)
-                    .collection('messages')
-                    .orderBy("timestamp", "asc")
-                    .onSnapshot(snapshot =>
-                        setRoomMessages(
-                            snapshot.docs.map(doc => (
-                                {
-                                    "id": doc.id,
-                                    "timestamp": doc.data().timestamp,
-                                    "user": doc.data().user,
-                                    "userImage": doc.data().userImage,
-                                    "message": doc.data().message
-                                }
-
-                            ))
-                        )
-                    )
-            }
 
         }
     }, [location.pathname])
+
+
 
     // console.log("roomMessages", roomMessages)
 

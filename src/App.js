@@ -22,15 +22,16 @@ function App() {
               <Sidebar />
               <Routes>
                 <Route path="/room/:roomId" element={<Chat />} />
-                <Route path="/about" element={<div style={{ marginTop: '400px' }}>manger de la banane</div>} />
-                <Route path="/" element={<div style={{ marginTop: '400px' }}>manger de la banane</div>} />
+                <Route path="/about" element={<div style={{ flex: "0.9", display: 'flex', flexDirection: "column", alignItems: "center" }}><h1 style={{ marginTop: "300px" }}>Just a welcoming Page</h1>. <p>Only the channels are operationnal you can add new channels if you want and chat in them with a peer </p> </div>} />
+                <Route path="/" element={<Chat />} />
               </Routes>
             </div>
           </>
-        )}
+        )
+        }
 
-      </Router>
-    </div>
+      </Router >
+    </div >
   );
 }
 
