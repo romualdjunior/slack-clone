@@ -11,26 +11,35 @@ import { useStateValue } from './StateProvier'
 import { useLocation } from 'react-router-dom'
 
 
-function Sidebar({ history }) {
+function Sidebar() {
     const [channels, setChannels] = useState([])
+    const [isPageLoaded, setPageLoaded] = useState(false)
     const [{ user }] = useStateValue()
     const location = useLocation()
 
-
-
+    const getHome = () => {
+        db.collection("rooms").onSnapshot(snapshot => {
+            setChannels(
+                snapshot.docs.map((doc) => ({
+                    id: doc.id,
+                    name: doc.data().name
+                }))
+            )
+        })
+    }
 
     useEffect(() => {
         return () => {
-            db.collection("rooms").onSnapshot(snapshot => {
-                setChannels(
-                    snapshot.docs.map((doc) => ({
-                        id: doc.id,
-                        name: doc.data().name
-                    }))
-                )
-            })
+            getHome()
         }
     }, [location.pathname])
+
+    if (isPageLoaded === false) {
+        getHome()
+        setPageLoaded(true)
+    }
+
+    console.log("channels channels", channels)
 
     return (
         <div className='sidebar'>
@@ -44,20 +53,20 @@ function Sidebar({ history }) {
                 </div>
                 <Create />
             </div>
-            <SidebarOption Icon={InsertComment} title="Threads" history={history} />
-            <SidebarOption Icon={Inbox} title="Mentions & reactions" history={history} />
-            <SidebarOption Icon={Drafts} title="Saved items" history={history} />
-            <SidebarOption Icon={BookmarkBorder} title="Channel browser" history={history} />
-            <SidebarOption Icon={PeopleAlt} title="People & user groups" history={history} />
-            <SidebarOption Icon={Apps} title="Apps" history={history} />
-            <SidebarOption Icon={FileCopy} title="File browser" history={history} />
-            <SidebarOption Icon={ExpandLess} title="Show less" history={history} />
+            <SidebarOption Icon={InsertComment} title="Threads" />
+            <SidebarOption Icon={Inbox} title="Mentions & reactions" />
+            <SidebarOption Icon={Drafts} title="Saved items" />
+            <SidebarOption Icon={BookmarkBorder} title="Channel browser" />
+            <SidebarOption Icon={PeopleAlt} title="People & user groups" />
+            <SidebarOption Icon={Apps} title="Apps" />
+            <SidebarOption Icon={FileCopy} title="File browser" />
+            <SidebarOption Icon={ExpandLess} title="Show less" />
             <hr />
-            <SidebarOption Icon={ExpandMore} title="Channel" history={history} />
+            <SidebarOption Icon={ExpandMore} title="Channel" />
             <hr />
-            <SidebarOption Icon={Add} title="Add Channel" addChannelOption={true} history={history} />
+            <SidebarOption Icon={Add} title="Add Channel" addChannelOption={true} />
             {channels.map(channel => (
-                <SidebarOption title={channel.name} id={channel.id} key={channel.id} history={history} />
+                <SidebarOption title={channel.name} id={channel.id} key={channel.id} />
             ))}
         </div>
     )

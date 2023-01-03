@@ -22,7 +22,7 @@ function App() {
               <Sidebar />
               <Routes>
                 <Route path="/room/:roomId" element={<Chat />} />
-                <Route path="/" element={<div style={{ marginTop: '400px' }}>manger de la banane</div>} />
+                <Route path="/about" element={<div style={{ marginTop: '400px' }}>manger de la banane</div>} />
                 <Route path="/" element={<div style={{ marginTop: '400px' }}>manger de la banane</div>} />
               </Routes>
             </div>

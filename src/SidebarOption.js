@@ -8,7 +8,7 @@ import "./SidebarOption.css"
 
 
 
-function SidebarOption({ Icon, title, id, addChannelOption, history }) {
+function SidebarOption({ Icon, title, id, addChannelOption }) {
 
     let navigate = useNavigate()
 
@@ -19,7 +19,6 @@ function SidebarOption({ Icon, title, id, addChannelOption, history }) {
             navigate(1)
         }
         else {
-            console.log("history", history)
             navigate("/about")
         }
     }
