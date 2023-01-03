@@ -6,9 +6,7 @@ import db from './firebase';
 import Message from './Message';
 import ChatInput from './ChatInput';
 
-//  useParams , useLocation change values in useEffect, they display the previous url instead of the actual one
-// So we use a global variable to stock the present url from useParams before it is changed in the useEffect to the previous one
-let currentRoomId = ""
+
 
 function Chat(props) {
 
@@ -17,18 +15,16 @@ function Chat(props) {
 
     const params = useParams();
 
-    // roomId value change in useEffect and takes the value found in the previous url
-    // to solve this issue we use a global variable 
+
     const roomId = params.roomId
-    currentRoomId = params.roomId
     const location = useLocation()
     const navigate = useNavigate()
 
 
     const getMessages = () => {
-        if (currentRoomId !== "") {
-            console.log(currentRoomId)
-            db.collection('rooms').doc(currentRoomId)
+        if (roomId !== "") {
+            // console.log("roomId", roomId)
+            db.collection('rooms').doc(roomId)
                 .onSnapshot((snapshot) => (
                     setRoomDetails(
                         {
@@ -37,8 +33,7 @@ function Chat(props) {
                         }
                     )
                 ))
-
-            db.collection('rooms').doc(currentRoomId)
+            db.collection('rooms').doc(roomId)
                 .collection('messages')
                 .orderBy("timestamp", "asc")
                 .onSnapshot(snapshot =>
@@ -56,22 +51,23 @@ function Chat(props) {
                     )
                 )
         }
+
     }
+
     useEffect(() => {
-        return () => {
-            console.log("currentRoomId", currentRoomId)
-            getMessages()
+        getMessages()
+        console.log("roomId", roomId)
+        const chat = document.getElementById("chat")
+        setTimeout(() => chat.scrollTo(0, chat.scrollHeight), 1000);
+    }, [roomId]);
 
 
-        }
-    }, [location.pathname])
 
 
 
-    // console.log("roomMessages", roomMessages)
 
     return (
-        <div className="chat">
+        <div className="chat" id="chat">
             <div className="chat__header">
                 <div className="chat__headerLeft">
                     <h4 className="chat__channelName">

@@ -13,11 +13,10 @@ import { useLocation } from 'react-router-dom'
 
 function Sidebar() {
     const [channels, setChannels] = useState([])
-    const [isPageLoaded, setPageLoaded] = useState(false)
     const [{ user }] = useStateValue()
     const location = useLocation()
 
-    const getHome = () => {
+    const getRooms = () => {
         db.collection("rooms").onSnapshot(snapshot => {
             setChannels(
                 snapshot.docs.map((doc) => ({
@@ -30,16 +29,13 @@ function Sidebar() {
 
     useEffect(() => {
         return () => {
-            getHome()
+            getRooms()
         }
     }, [location.pathname])
 
-    if (isPageLoaded === false) {
-        getHome()
-        setPageLoaded(true)
-    }
-
-    console.log("channels channels", channels)
+    useEffect(() => {
+        getRooms()
+    }, []);
 
     return (
         <div className='sidebar'>
