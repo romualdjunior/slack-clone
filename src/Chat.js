@@ -26,22 +26,38 @@ function Chat(props) {
     useEffect(() => {
         return () => {
             console.log("currentRoomId", currentRoomId)
-            console.log("currentRoomId", currentRoomId)
 
-            if (currentRoomId !== "")
+            if (currentRoomId !== "") {
+                console.log(currentRoomId)
                 db.collection('rooms').doc(currentRoomId)
-                    .onSnapshot(snapshot => (
-                        setRoomDetails(snapshot.data())
+                    .onSnapshot((snapshot) => (
+                        setRoomDetails(
+                            {
+                                id: snapshot.id,
+                                name: snapshot.data().name
+                            }
+                        )
+                    ))
+
+                db.collection('rooms').doc(currentRoomId)
+                    .collection('messages')
+                    .orderBy("timestamp", "asc")
+                    .onSnapshot(snapshot =>
+                        setRoomMessages(
+                            snapshot.docs.map(doc => (
+                                {
+                                    "id": doc.id,
+                                    "timestamp": doc.data().timestamp,
+                                    "user": doc.data().user,
+                                    "userImage": doc.data().userImage,
+                                    "message": doc.data().message
+                                }
+
+                            ))
+                        )
                     )
-                    )
-            db.collection('rooms').doc(currentRoomId)
-                .collection('messages')
-                .orderBy("timestamp", "asc")
-                .onSnapshot(snapshot =>
-                    setRoomMessages(
-                        snapshot.docs.map(doc => doc.data())
-                    )
-                )
+            }
+
         }
     }, [location.pathname])
 
@@ -64,7 +80,7 @@ function Chat(props) {
             </div>
             <div className="chat__messages">
                 {roomMessages.map(({ message, timestamp, user, userImage, id }) => (
-                    <Message id={id}
+                    <Message key={id}
                         message={message}
                         timestamp={timestamp}
                         user={user}
@@ -72,7 +88,7 @@ function Chat(props) {
                     />
                 ))}
             </div>
-            <ChatInput channelName={roomDetails?.name} channelId={currentRoomId} />
+            <ChatInput channelName={roomDetails?.name} channelId={roomDetails?.id} />
         </div>
     )
 }

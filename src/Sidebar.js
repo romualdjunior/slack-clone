@@ -6,23 +6,32 @@ import { Create } from '@material-ui/icons'
 import { InsertComment } from '@material-ui/icons'
 import SidebarOption from './SidebarOption'
 import db from './firebase'
+
 import { useStateValue } from './StateProvier'
+import { useLocation } from 'react-router-dom'
+
+
 function Sidebar({ history }) {
     const [channels, setChannels] = useState([])
     const [{ user }] = useStateValue()
+    const location = useLocation()
+
+
 
 
     useEffect(() => {
         return () => {
-            db.collection("rooms").onSnapshot(snapshot => (
-                setChannels(snapshot.docs.map(doc => ({
-                    id: doc.id,
-                    name: doc.data().name
-                })))
-            ))
+            db.collection("rooms").onSnapshot(snapshot => {
+                setChannels(
+                    snapshot.docs.map((doc) => ({
+                        id: doc.id,
+                        name: doc.data().name
+                    }))
+                )
+            })
         }
-    }, [])
-    console.log("history", history)
+    }, [location.pathname])
+
     return (
         <div className='sidebar'>
             <div className="sidebar__header">
@@ -48,7 +57,7 @@ function Sidebar({ history }) {
             <hr />
             <SidebarOption Icon={Add} title="Add Channel" addChannelOption={true} history={history} />
             {channels.map(channel => (
-                <SidebarOption title={channel.name} id={channel.id} key={channel.name} history={history} />
+                <SidebarOption title={channel.name} id={channel.id} key={channel.id} history={history} />
             ))}
         </div>
     )

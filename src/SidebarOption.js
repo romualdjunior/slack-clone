@@ -24,6 +24,7 @@ function SidebarOption({ Icon, title, id, addChannelOption, history }) {
         }
     }
 
+
     const addChannel = () => {
         const channelName = prompt("Please enter the channel name")
         if (channelName) {
@@ -32,6 +33,7 @@ function SidebarOption({ Icon, title, id, addChannelOption, history }) {
             })
         }
     }
+
     return (
         <div className='sidebarOption' onClick={addChannelOption ? addChannel : selectChannel}>
             {Icon && <Icon className="sidebarOption__icon" />}

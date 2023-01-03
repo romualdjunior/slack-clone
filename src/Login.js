@@ -4,6 +4,7 @@ import "./Login.css"
 import { auth, provider } from "./firebase"
 import { useStateValue } from './StateProvier'
 import { actionTypes } from './reducer'
+import { signInWithPopup } from 'firebase/auth'
 
 function Login() {
     const [state, dispatch] = useStateValue()
